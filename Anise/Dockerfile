@@ -2,8 +2,8 @@
 FROM ubuntu:16.04
 
 ## LABELS
-LABEL maintainer "qiang.tang@hannto.com"
-LABEL version "0.00.001"
+LABEL maintainer "juhan.zhang@hannto.com"
+LABEL version "0.00.002"
 
 ## Set the arguments
 ARG USER_NAME=longan
@@ -16,12 +16,12 @@ RUN groupadd -g ${GROUP_ID} ${GROUP_NAME}
 RUN useradd -u ${USER_ID} -s /bin/bash -g ${GROUP_NAME} -m ${USER_NAME}
 
 ## Install the dependencies
-# COPY sources.list /etc/apt/sources.list
+COPY sources.list /etc/apt/sources.list
 RUN dpkg --add-architecture i386
-RUN apt-get update
+RUN apt-get update && apt-get install --assume-yes apt-utils 
 RUN apt-get install -y iputils-ping build-essential subversion wget git-core libncurses5-dev gawk \
     flex quilt libssl-dev xsltproc libxml-parser-perl mercurial bzr ecj cvs unzip lib32ncurses5 \
-    busybox libc6:i386 libncurses5:i386 libstdc++6:i386 cmake
+    busybox libc6:i386 libncurses5:i386 libstdc++6:i386 cmake bc
 
 ## Mount the volume
 ENV DATA_PATH "/data"
@@ -36,7 +36,7 @@ WORKDIR /home/${USER_NAME}
 
 ## Copy the ssh key
 RUN mkdir .ssh
-COPY --chown=1000:1000 id_ecdsa* .ssh/
+COPY --chown=${USER_ID}:${GROUP_ID} id_ecdsa* .ssh/
 RUN chmod 600 .ssh/id_ecdsa
 RUN chmod 644 .ssh/id_ecdsa.pub
 
