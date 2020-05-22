@@ -5,6 +5,9 @@ FROM ubuntu:16.04
 LABEL maintainer "juhan.zhang@hannto.com"
 LABEL version "0.00.002"
 
+## Disable frontend warning
+ENV DEBIAN_FRONTEND noninteractive
+
 ## Set the arguments
 ARG USER_NAME=longan
 ARG GROUP_NAME=longan
@@ -21,7 +24,7 @@ RUN dpkg --add-architecture i386
 RUN apt-get update && apt-get install --assume-yes apt-utils 
 RUN apt-get install -y iputils-ping build-essential subversion wget git-core libncurses5-dev gawk \
     flex quilt libssl-dev xsltproc libxml-parser-perl mercurial bzr ecj cvs unzip lib32ncurses5 \
-    busybox libc6:i386 libncurses5:i386 libstdc++6:i386 cmake bc
+    busybox libc6:i386 libncurses5:i386 libstdc++6:i386 cmake bc cpio liblz4-tool
 
 ## Mount the volume
 ENV DATA_PATH "/data"
